@@ -1,0 +1,206 @@
+<mat-toolbar color="primary">
+    <div class="page-label spacer">
+        view invoice
+    </div>
+
+    <button mat-icon-button (click)="download()">
+        <mat-icon>
+            cloud_download
+        </mat-icon>
+    </button>
+
+    <button mat-icon-button routerLink="/invoices">
+        <mat-icon>
+            close
+        </mat-icon>
+    </button>
+</mat-toolbar>
+
+<mat-progress-bar mode="indeterminate" color="accent" *ngIf="loading"></mat-progress-bar>
+
+<div class="page-body">
+    <div id="pdf" class="page" *ngIf="!loading && invoice">
+        <div class="row">
+            <div class="col-1 column company">
+                <img src="./assets/icons/icon-72x72.png" alt="biTid Logo" class="logo">
+
+                <h1>
+                    biTid
+                </h1>
+            </div>
+    
+            <div class="col-6"></div>
+
+            <table class="col-3 details">
+                <tr>
+                    <th colspan="2">
+                        invoice
+                    </th>
+                </tr>
+
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <td>
+                        {{ invoice.invoiceId }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>
+                        date
+                    </th>
+                    <td>
+                        {{ invoice.date.initialized | date : 'yyyy/MM/dd' }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row">
+            <div class="col column">
+                <table class="vat-reg">
+                    <tr>
+                        <th>
+                            VAT
+                        </th>
+                        <td>
+                            4840284436
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            REG
+                        </th>
+                        <td>
+                            2016/525522/07
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="col"></div>
+
+            <div class="col column"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-4 column">
+                <table class="recipient">
+                    <tr>
+                        <th>
+                            invoice to
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="name">
+                            {{ invoice.recipient.name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ invoice.recipient.address }}
+                        </td>
+                    </tr>
+                    <tr *ngIf="invoice.recipient.type == 'business'">
+                        <td class="name">
+                            vat: {{ invoice.recipient.vat }}
+                        </td>
+                    </tr>
+                    <tr *ngIf="invoice.recipient.type == 'business'">
+                        <td class="name">
+                            reg: {{ invoice.recipient.reg }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="col-6"></div>
+        </div>
+
+        <div class="line-items-container">
+            <table class="line-items">
+                <thead>
+                    <tr>
+                        <th>
+                            description
+                        </th>
+                        <th>
+                            price
+                        </th>
+                        <th>
+                            quantity
+                        </th>
+                        <th>
+                            tax
+                        </th>
+                        <th>
+                            nett
+                        </th>
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    <tr *ngFor="let row of invoice.items">
+                        <td>
+                            {{ row.description }}
+                        </td>
+                        <td>
+                            {{ row.amount | currency : 'R' }}
+                        </td>
+                        <td>
+                            {{ row.quantity | number }}
+                        </td>
+                        <td>
+                            {{ row.tax | number }}%
+                        </td>
+                        <td>
+                            {{ row.nett | currency : 'R' }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            <div class="col-6"></div>
+
+            <div class="col-4 column">
+                <table class="totals">
+                    <tr>
+                        <th>
+                            sub total
+                        </th>
+                        
+                        <td>
+                            {{ invoice.subtotal | currency : 'R' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            vat
+                        </th>
+                        
+                        <td>
+                            {{ invoice.vat | currency : 'R' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            total
+                        </th>
+                        
+                        <th>
+                            {{ invoice.total | currency : 'R' }}
+                        </th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="paid" *ngIf="invoice.status == 'paid'">
+            paid
+        </div>
+    </div>
+</div>

@@ -1,0 +1,213 @@
+.page-body {
+    margin: 			0px;
+    font-family: 		Roboto;
+    align-items: 		center;
+    flex-direction: 	column;
+    justify-content: 	center;
+    background-color: 	#FAFAFA;
+    button {
+        width:  200px;
+        margin: auto;
+    }
+}
+.page {
+    width: 				694px;
+    height: 			1123px;
+    margin:             auto;
+    display:            flex;
+    padding:            50px;
+    position:           relative;
+    min-width: 		    694px;
+    max-width: 		    694px;
+    min-height: 	    1123px;
+    max-height: 	    1123px;
+    margin-top:         20px;
+    flex-direction:     column;
+    background-color: 	#FFFFFF;
+    h1, h2, h3, h4, p {
+        margin:     0px;
+        padding:    0px;
+    }
+    .row {
+        display:        flex;
+        flex-direction: row;
+    }
+    .column {
+        display:        flex;
+        flex-direction: column;
+    }
+    .col {
+        flex: 1 auto;
+    }
+    .col-2 {
+        flex: 0 20%;
+    }
+    .col-3 {
+        flex: 0 30%;
+    }
+    .col-4 {
+        flex: 0 40%;
+    }
+    .col-5 {
+        flex: 0 50%;
+    }
+    .col-6 {
+        flex: 0 60%;
+    }
+    .col-7 {
+        flex: 0 70%;
+    }
+    .col-8 {
+        flex: 0 80%;
+    }
+    .col-9 {
+        flex: 0 90%;
+    }
+    .col-10 {
+        flex: 0 100%;
+    }
+    table {
+        border-collapse: collapse;
+        th, td {
+            padding: 5px;
+        }
+    }
+    .details {
+        text-transform: uppercase;
+        tr:nth-child(1) {
+            th {
+                color:          #3860AD;
+                font-size:      40px;
+                text-align:     right;
+                padding-bottom: 32px;
+            }
+        }
+        tr:nth-child(2),
+        tr:nth-child(3) {
+            th {
+                padding:        2.5px 5px;
+                text-align:     left;
+                font-weight:    500;
+            }
+            td {
+                padding:    2.5px 5px;
+                text-align: right;
+            }
+        }
+    }
+    .company {
+        align-items:        center;
+        justify-content:    center;
+    }
+    .vat-reg {
+        margin: 20px 0px;
+        th {
+            text-align:     left;
+            font-weight:    500;
+        }
+        th, td {
+            padding: 0px;
+        }
+    }
+    .recipient {
+        margin-bottom:  20px;
+        text-transform: uppercase;
+        th {
+            color:          #3860AD;
+            padding:        0px;
+            font-size:      24px;
+            text-align:     left;
+            font-weight:    500;
+            line-height:    24px;
+            padding-bottom: 10px;
+        }
+        td {
+            padding:    0px;
+            font-size:  14px;
+            text-align: left;
+        }
+        .name {
+            font-weight: 500;
+        }
+    }
+    .line-items-container {
+        min-height:     500px;
+        margin-bottom:  20px;
+        border-bottom:  1px solid #E0E0E0;
+    }
+    .line-items {
+        thead {
+            tr th {
+                color:              #FFFFFF;
+                height:             20px;
+                padding:            5px 10px;
+                font-size:          14px;
+                line-height:        20px;
+                font-weight:        500;
+                text-transform:     uppercase;
+                background-color:   #3860AD;
+            }
+        }
+        tbody {
+            tr td {
+                padding:        5px 10px;
+                font-size:      14px;
+                line-height:    20px;
+                text-transform: uppercase;
+            }
+            tr:nth-child(even) {
+                background-color: #FAFAFA;
+            }
+        }
+        tr {
+            th:nth-child(1) {
+                text-align: left;
+            }
+            th:nth-child(2),
+            th:nth-child(3),
+            th:nth-child(4),
+            th:nth-child(5) {
+                width:      100px;
+                text-align: right;
+            }
+            td:nth-child(1) {
+                text-align: left;
+            }
+            td:nth-child(2),
+            td:nth-child(3),
+            td:nth-child(4),
+            td:nth-child(5) {
+                text-align: right;
+            }
+        }
+    }
+    .totals {
+        font-size:      16px;
+        line-height:    16px;
+        text-transform: uppercase;
+        th {
+            font-weight: 500;
+        }
+        th, td {
+            padding:    0px;
+            text-align: right;
+        }
+    }
+    .paid {
+        top:                461.5px;
+        left:               30px;
+        color:              red;
+        width:              694px;
+        height:             200px;
+        border:             20px solid red;
+        display:            flex;
+        opacity:            0.25;
+        position:           absolute;
+        font-size:          200px;
+        transform:          rotateY(0deg) rotate(-45deg);
+        align-items:        center;
+        border-radius:      30px;
+        text-transform:     uppercase;
+        justify-content:    center;
+    }
+}

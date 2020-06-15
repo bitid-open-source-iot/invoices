@@ -1,0 +1,45 @@
+{
+    "production":       false,
+    "authentication":   false,
+    "auth": {
+        "host":         "xxx",
+        "token":    "xxx",
+        "email":    "xxx@xxx.co.za",
+        "appId":    "xxx"
+    },
+    "localwebserver": {
+        "port": 22000
+    },
+    "mongodb": {
+        "url":      "xxx",
+        "database": "xxx"
+    },
+    "smtp": {
+        "tls": {
+            "rejectUnauthorized": false
+        },
+        "host":                 "127.0.0.1",
+        "port":                 25,
+        "secure":               false,
+        "connectionTimeout":    10000
+    },
+    "logger": {
+        "appenders": {
+            "invoices": {
+                "type":         "file",
+                "backups":      10,
+                "filename":     "./logs/invoices.log",
+                "absolute":     true,
+                "maxLogSize":   102400
+            }
+        },
+        "categories": {
+            "default": {
+                "appenders": [
+                    "invoices"
+                ],
+                "level": "error"
+            }
+        }
+    }
+}

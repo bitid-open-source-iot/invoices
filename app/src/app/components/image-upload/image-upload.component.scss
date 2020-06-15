@@ -1,0 +1,42 @@
+.image-upload {
+    width:              39px;
+    height:             39px;
+    margin:             auto;
+    border:             1px solid #E0E0E0;
+    display:            flex;
+    position:           relative;
+    align-items:        center;
+    border-radius:      4px;
+    justify-content:    center;
+    img {
+        max-width:  39px;
+        max-height: 39px;
+    }
+    label {
+        top:                -6px;
+        left:               5px;
+        color:              #616161;
+        padding:            0px 5px;
+        position:           absolute;
+        font-size:          11px;
+        line-height:        11px;
+        background-color:   #FAFAFA;
+    }
+    input {
+        display: none;
+    }
+    .ripple {
+        top:        0px;
+        left:       0px;
+        right:      0px;
+        bottom:     0px;
+        z-index:    1;
+        position:   absolute;
+    }
+}
+.image-upload:hover {
+    border: 2px solid #000;
+    label span {
+        color: #2196F3 !important;
+    }
+}

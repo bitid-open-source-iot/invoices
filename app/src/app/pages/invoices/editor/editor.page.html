@@ -1,0 +1,267 @@
+<mat-toolbar color="primary">
+    <div class="page-label spacer">
+        {{ mode == 'add' ? 'add invoice' : '' }}
+        {{ mode == 'copy' ? 'copy invoice' : '' }}
+        {{ mode == 'update' ? 'update invoice' : '' }}
+    </div>
+
+    <button mat-icon-button routerLink="/invoices">
+        <mat-icon>
+            close
+        </mat-icon>
+    </button>
+</mat-toolbar>
+
+<mat-progress-bar mode="indeterminate" color="accent" *ngIf="loading"></mat-progress-bar>
+
+<div class="page-body">
+    <table mat-table [dataSource]="items">
+        <ng-container matColumnDef="icon">
+            <th mat-header-cell *matHeaderCellDef text-uppercase>
+                icon
+            </th>
+            <td mat-cell *matCellDef="let element" text-uppercase>
+                <app-image-upload [value]="element.icon" (change)="IconChange($event, element)"></app-image-upload>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <app-image-upload [value]="item.icon" (change)="IconChange($event, item)"></app-image-upload>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef text-uppercase>
+                description
+            </th>
+            <td mat-cell *matCellDef="let element" text-uppercase>
+                <input matInput type="text" name="description" [(ngModel)]="element.description" required>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <input matInput type="text" name="description" [(ngModel)]="item.description" required>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef text-uppercase>
+                quantity
+            </th>
+            <td mat-cell *matCellDef="let element" text-uppercase>
+                <input matInput type="number" name="quantity" [(ngModel)]="element.quantity" required>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <input matInput type="number" name="quantity" [(ngModel)]="item.quantity" required>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tax">
+            <th mat-header-cell *matHeaderCellDef text-uppercase>
+                tax
+            </th>
+            <td mat-cell *matCellDef="let element" text-uppercase>
+                <input matInput type="number" name="tax" [(ngModel)]="element.tax" required>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <input matInput type="number" name="tax" [(ngModel)]="item.tax" required>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef text-uppercase>
+                unit price
+            </th>
+            <td mat-cell *matCellDef="let element" text-uppercase>
+                <input matInput type="number" name="amount" [(ngModel)]="element.amount" required>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <input matInput type="number" name="amount" [(ngModel)]="item.amount" required>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="options">
+            <th mat-header-cell *matHeaderCellDef text-uppercase></th>
+            <td mat-cell *matCellDef="let element" text-uppercase>
+                <button mat-icon-button color="warn" (click)="remove(element.itemId)">
+                    <mat-icon>
+                        delete
+                    </mat-icon>
+                </button>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <button mat-icon-button color="primary" (click)="add()">
+                    <mat-icon>
+                        add
+                    </mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns; sticky: true;"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="columns; sticky: true;"></tr>
+    </table>
+
+    <form [formGroup]="form" (ngSubmit)="!form.invalid && submit()">
+        <mat-form-field appearance="outline">
+            <mat-label text-uppercase>
+                Due Date
+            </mat-label>
+            
+            <input matInput type="date" name="date_due" formControlName="date_due" required>
+
+            <mat-error *ngIf="errors.date_due">
+                {{ errors.date_due }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label text-uppercase>
+                Company Registration
+            </mat-label>
+            
+            <input matInput type="text" name="recipient_reg" placeholder="Company Registration" formControlName="recipient_reg" required>
+
+            <mat-error *ngIf="errors.recipient_reg">
+                {{ errors.recipient_reg }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label text-uppercase>
+                Company VAT
+            </mat-label>
+            
+            <input matInput type="text" name="recipient_vat" placeholder="Company VAT" formControlName="recipient_vat" required>
+
+            <mat-error *ngIf="errors.recipient_vat">
+                {{ errors.recipient_vat }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label text-uppercase>
+                Type
+            </mat-label>
+            
+            <mat-select name="recipient_type" placeholder="Type" formControlName="recipient_type" required>
+                <mat-option value="personal">
+                    Personal
+                </mat-option>
+
+                <mat-option value="business">
+                    Business
+                </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="errors.recipient_type">
+                {{ errors.recipient_type }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label text-uppercase>
+                Name
+            </mat-label>
+            
+            <input matInput type="text" name="recipient_name" placeholder="Name" formControlName="recipient_name" required>
+
+            <mat-error *ngIf="errors.recipient_name">
+                {{ errors.recipient_name }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label text-uppercase>
+                Street
+            </mat-label>
+            
+            <input matInput type="text" name="recipient_street" placeholder="Street" formControlName="recipient_street" required>
+
+            <mat-error *ngIf="errors.recipient_street">
+                {{ errors.recipient_street }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label text-uppercase>
+                Suburb
+            </mat-label>
+            
+            <input matInput type="text" name="recipient_suburb" placeholder="Suburb" formControlName="recipient_suburb" required>
+
+            <mat-error *ngIf="errors.recipient_suburb">
+                {{ errors.recipient_suburb }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label text-uppercase>
+                Country
+            </mat-label>
+            
+            <input matInput type="text" name="recipient_country" placeholder="Country" formControlName="recipient_country" required>
+
+            <mat-error *ngIf="errors.recipient_country">
+                {{ errors.recipient_country }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label text-uppercase>
+                Town/City
+            </mat-label>
+            
+            <input matInput type="text" name="recipient_townCity" placeholder="Town/City" formControlName="recipient_townCity" required>
+
+            <mat-error *ngIf="errors.recipient_townCity">
+                {{ errors.recipient_townCity }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label text-uppercase>
+                Postal Code
+            </mat-label>
+            
+            <input matInput type="text" name="recipient_postalCode" placeholder="Postal Code" formControlName="recipient_postalCode" required>
+
+            <mat-error *ngIf="errors.recipient_postalCode">
+                {{ errors.recipient_postalCode }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label text-uppercase>
+                description
+            </mat-label>
+            
+            <input matInput type="text" name="description" placeholder="description" formControlName="description" required>
+
+            <mat-error *ngIf="errors.description">
+                {{ errors.description }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label text-uppercase>
+                sharing rules
+            </mat-label>
+            
+            <mat-select name="organizationOnly" placeholder="sharing rules" formControlName="organizationOnly" required>
+                <mat-option [value]="0">
+                    Anyone Can Share
+                </mat-option>
+
+                <mat-option [value]="1">
+                    In Organization Only
+                </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="errors.organizationOnly">
+                {{ errors.organizationOnly }}
+            </mat-error>
+        </mat-form-field>
+
+        <button type="submit" mat-flat-button color="primary">
+            submit
+        </button>
+    </form>
+</div>
