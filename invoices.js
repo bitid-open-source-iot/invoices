@@ -1,17 +1,19 @@
-var Q                   = require('q');
-var db                  = require('./db/mongo');
-var auth                = require('./lib/auth');
-var cors                = require('cors');
-var http                = require('http');
-var chalk               = require('chalk');
-var express             = require('express');
-var responder           = require('./lib/responder');
-var bodyParser          = require('body-parser');
+var Q           = require('q');
+var db          = require('./db/mongo');
+var auth        = require('./lib/auth');
+var cors        = require('cors');
+var http        = require('http');
+var chalk       = require('chalk');
+var express     = require('express');
+var responder   = require('./lib/responder');
+var bodyParser  = require('body-parser');
+var healthcheck = require('@bitid/health-check');
 
-global.__base           = __dirname + '/';
-global.__sockets        = [];
-global.__settings       = require('./config.json');
-global.__responder      = new responder.module();
+global.__base       = __dirname + '/';
+global.__logger     = require('./lib/logger');
+global.__sockets    = [];
+global.__settings   = require('./config.json');
+global.__responder  = new responder.module();
 
 try {
     var portal = {
@@ -73,9 +75,14 @@ try {
 
                 var payfast = require('./api/payfast');
                 app.use('/api/payfast', payfast);
+                __logger.info('Loaded: ./api/payfast');
 
                 var invoices = require('./api/invoices');
                 app.use('/api/invoices', invoices);
+                __logger.info('Loaded: ./api/invoices');
+
+                app.use('/health-check', healthcheck);
+                __logger.info('Loaded: ./health-check');
 
                 app.use((err, req, res, next) => {
                     portal.errorResponse.error.code              = 500;
@@ -122,13 +129,23 @@ try {
                 console.log('');
             };
 
-            portal.api(args)
+            portal.logger(args)
+            .then(portal.api, null)
             .then(portal.database, null)
             .then(args => {
                 console.log('Webserver Running on port: ', args.settings.localwebserver.port);
             }, err => {
                 console.log('Error Initializing: ', err);
             });
+        },
+
+        logger: (args) => {
+            var deferred = Q.defer();
+
+            __logger.init();
+            deferred.resolve(args);
+
+            return deferred.promise;
         },
 
         database: (args) => {

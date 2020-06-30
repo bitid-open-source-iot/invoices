@@ -244,6 +244,30 @@ describe('Remove Added Items', function() {
     });
 });
 
+describe('Health Check', function() {
+    it('/', function(done) {
+        this.timeout(5000);
+
+        tools.api.healthcheck()
+        .then((result) => {
+            try {
+                result.should.have.property('uptime');
+                result.should.have.property('memory');
+                result.should.have.property('database');
+                done();
+            } catch(e) {
+                done(e);
+            };
+        }, (err) => {
+            try {
+                done(err);
+            } catch(e) {
+                done(e);
+            };
+        });
+    });
+});
+
 var tools = {
     api: {
         payfast: {
@@ -439,6 +463,14 @@ var tools = {
 
                 return deferred.promise;
             }
+        },
+        healthcheck: () => {
+            var deferred = Q.defer();
+            
+            tools.put('/health-check', {})
+            .then(deferred.resolve, deferred.resolve);
+
+            return deferred.promise;
         }
     },
     put: async (url, payload) => {
