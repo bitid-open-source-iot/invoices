@@ -15,7 +15,7 @@ var module = function() {
                     "code":         1,
                     "reason":       "General Payfast Error",
                     "message":      "Payfast Error",
-                    "locaction":    "bllPayfast",
+                    "location":    "bllPayfast",
                     "locationType": "body"
                 }]
             },
@@ -66,7 +66,7 @@ var module = function() {
                     "code":         1,
                     "reason":       "General Invoices Error",
                     "message":      "Invoices Error",
-                    "locaction":    "bllInvoices",
+                    "location":    "bllInvoices",
                     "locationType": "body"
                 }]
             },

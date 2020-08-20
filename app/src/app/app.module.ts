@@ -22,6 +22,7 @@ import { AuthManager } from './services/account/account.manager';
 import { MenuService } from './services/menu/menu.service';
 import { ToastService } from './services/toast/toast.service';
 import { ConfigService } from './services/config/config.service';
+import { HistoryService } from './services/history/history.service';
 import { AccountService } from './services/account/account.service';
 import { InvoicesService } from './services/invoices/invoices.service';
 import { FormErrorService } from './services/form-error/form-error.service';
@@ -58,6 +59,7 @@ import { AppComponent } from './app.component';
         ToastService,
         ConfigService,
         AccountService,
+        HistoryService,
         InvoicesService,
         FormErrorService,
         LocalstorageService

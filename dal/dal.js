@@ -11,7 +11,7 @@ var module = function() {
 				'errors': [{
 					'reason': 		'Dal Invoices Error',
 					'message': 		'Invalid Credentials',
-					'locaction': 	'dalInvoices',
+					'location': 	'dalInvoices',
 					'locationType': 'header'
 				}]
 			},
