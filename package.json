@@ -2,7 +2,7 @@
   "name": "invoices",
   "version": "1.0.0",
   "description": "",
-  "main": "invoices.js",
+  "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec"
   },

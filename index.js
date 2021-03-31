@@ -1,48 +1,33 @@
-var Q           = require('q');
-var db          = require('./db/mongo');
-var auth        = require('./lib/auth');
-var cors        = require('cors');
-var http        = require('http');
-var chalk       = require('chalk');
-var express     = require('express');
-var responder   = require('./lib/responder');
-var bodyParser  = require('body-parser');
-var healthcheck = require('@bitid/health-check');
+const Q = require('q');
+const db = require('./db/mongo');
+const auth = require('./lib/auth');
+const cors = require('cors');
+const http = require('http');
+const chalk = require('chalk');
+const express = require('express');
+const responder = require('./lib/responder');
+const healthcheck = require('@bitid/health-check');
+const ErrorResponse = require('./lib/error-response');
 
-global.__base       = __dirname + '/';
-global.__logger     = require('./lib/logger');
-global.__sockets    = [];
-global.__settings   = require('./config.json');
-global.__responder  = new responder.module();
+global.__base = __dirname + '/';
+global.__logger = require('./lib/logger');
+global.__sockets = [];
+global.__settings = require('./config.json');
+global.__responder = new responder.module();
 
 try {
     var portal = {
-        errorResponse: {
-            "error": {
-                "code":     401,
-                "message":  "Invalid Credentials",
-                "errors":[{
-                    "code":         401,
-                    "reason":       "Portal Error",
-                    "message":      "Portal Error",
-                    "location":    "portal",
-                    "locationType": "portal"
-                }]
-            },
-            "hiddenErrors":[]
-        },
-
         api: (args) => {
             var deferred = Q.defer();
 
             try {
                 var app = express();
                 app.use(cors());
-                app.use(bodyParser.urlencoded({
-                    'limit':    '50mb',
+                app.use(express.urlencoded({
+                    'limit': '50mb',
                     'extended': true
                 }));
-                app.use(bodyParser.json({
+                app.use(express.json({
                     "limit": '50mb'
                 }));
 
@@ -53,15 +38,11 @@ try {
                                 'req': req,
                                 'res': res
                             })
-                            .then(result => {
-                                next(); 
-                            }, err => {
-                                console.log("body error: ", req.body)
-                                console.log("error: ", err)
-                                err.error.code              = 401;
-                                err.error.errors[0].code    = 401;
-                                __responder.error(req, res, err);
-                            });
+                                .then(result => {
+                                    next();
+                                }, err => {
+                                    __responder.error(req, res, err);
+                                });
                         } else {
                             next();
                         };
@@ -84,22 +65,22 @@ try {
                 app.use('/health-check', healthcheck);
                 __logger.info('Loaded: ./health-check');
 
-                app.use((err, req, res, next) => {
-                    portal.errorResponse.error.code              = 500;
-                    portal.errorResponse.error.message           = 'Something broke';
-                    portal.errorResponse.error.errors[0].code    = 500;
-                    portal.errorResponse.error.errors[0].message = 'Something broke';
-                    portal.errorResponse.hiddenErrors.push(err.stack);
-                    __responder.error(req, res, portal.errorResponse);
+                app.use((error, req, res, next) => {
+                    var err = new ErrorResponse()
+                    err.error.code = 500;
+                    err.error.message = 'Something broke';
+                    err.error.errors[0].code = 500;
+                    err.error.errors[0].message = 'Something broke';
+                    __responder.error(req, res, err);
                 });
 
                 var server = http.createServer(app);
                 server.listen(args.settings.localwebserver.port);
                 deferred.resolve(args);
-            } catch(err) {
+            } catch (err) {
                 deferred.reject(err.message);
             };
-            
+
             return deferred.promise;
         },
 
@@ -130,13 +111,13 @@ try {
             };
 
             portal.logger(args)
-            .then(portal.api, null)
-            .then(portal.database, null)
-            .then(args => {
-                console.log('Webserver Running on port: ', args.settings.localwebserver.port);
-            }, err => {
-                console.log('Error Initializing: ', err);
-            });
+                .then(portal.api, null)
+                .then(portal.database, null)
+                .then(args => {
+                    console.log('Webserver Running on port: ', args.settings.localwebserver.port);
+                }, err => {
+                    console.log('Error Initializing: ', err);
+                });
         },
 
         logger: (args) => {
@@ -165,6 +146,6 @@ try {
     portal.init({
         'settings': __settings
     });
-} catch(error) {
+} catch (error) {
     console.log('The following error has occurred: ', error.message);
 };
