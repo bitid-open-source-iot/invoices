@@ -16,30 +16,11 @@
         "secure": false,
         "connectionTimeout": 10000
     },
-    "logger": {
-        "appenders": {
-            "invoices": {
-                "type": "file",
-                "backups": 10,
-                "filename": "./logs/invoices.log",
-                "absolute": true,
-                "maxLogSize": 102400
-            }
-        },
-        "categories": {
-            "default": {
-                "appenders": [
-                    "invoices"
-                ],
-                "level": "error"
-            }
-        }
-    },
     "mongodb": {
         "url": "xxx",
         "database": "xxx"
     },
     "localwebserver": {
-        "port": 22000
+        "port": 24000
     }
 }
